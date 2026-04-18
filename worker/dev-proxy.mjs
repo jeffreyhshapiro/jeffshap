@@ -69,6 +69,10 @@ My first dev job, fresh out of bootcamp. Built an Alexa skill for recording pati
 
 **Tab Cafe** — A browser-based guitar tab editor with AI audio transcription. I always thought it would be cool if there was a free and easy to use guitar tab program where someone can write their ideas down and hear it back in real time. You can also hum, sing, or upload a melody and it will give you guitar tabs back!
 
+## Education and fellowships
+
+Overclock Accelerator — AI Engineering Fellow (Oct 2025–Dec 2025, online). Rutgers Coding Bootcamp (2016). Master of Biotechnology, University of Pennsylvania (2013). BS Environmental Science, Rutgers (2011).
+
 ## How I think about engineering
 
 Web-focused, mostly frontend and architecture. I care about building things that are fast, maintainable, and actually useful — whether that's for end users or the rest of the team. I've spent most of my career in ecommerce, so I think a lot about performance, SEO, and the unglamorous-but-important stuff that makes products work at scale.

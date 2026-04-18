@@ -121,6 +121,13 @@ export function ResumeMode() {
           <h2 className="resume__section-title">Education</h2>
           <div className="resume__edu">
             <div className="resume__job-header">
+              <span className="resume__job-title">AI Engineering Fellow</span>
+              <span className="resume__job-dates">Oct 2025 - Dec 2025</span>
+            </div>
+            <p className="resume__edu-school">Overclock Accelerator, Online</p>
+          </div>
+          <div className="resume__edu">
+            <div className="resume__job-header">
               <span className="resume__job-title">Web Development</span>
               <span className="resume__job-dates">2016</span>
             </div>

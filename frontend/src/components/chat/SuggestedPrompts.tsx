@@ -1,8 +1,9 @@
 const PROMPTS = [
+  "Tell me about your career",
   "What are you working on?",
   "What's your background?",
-  "Tell me about Tab Cafe",
-  "How do you think about frontend architecture?",
+  "How can I get in touch with you?",
+  "Are you working on any fun projects?"
 ];
 
 interface Props {

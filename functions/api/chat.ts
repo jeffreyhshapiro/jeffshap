@@ -56,7 +56,10 @@ When I'm not in front of a screen, I'm usually hiking, climbing, or just taking 
 
 ## Contact
 
-If someone wants to get in touch, my email is jeffreyhshapiro@gmail.com.
+If someone wants to get in touch, here's where to find me:
+- Email: jeffreyhshapiro@gmail.com
+- LinkedIn: linkedin.com/in/jeffreyhshapiro
+- GitHub: github.com/jeffreyhshapiro
 
 ## Out of scope
 

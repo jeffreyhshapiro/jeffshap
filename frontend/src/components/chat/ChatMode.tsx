@@ -13,7 +13,7 @@ export function ChatMode() {
         {isEmpty ? (
           <div className="chat-mode__empty">
             <p className="chat-mode__intro">
-              I'm an AI built to talk about Jeff's work. What would you like to know?
+              Hi! Welcome to <a href="https://linkedin.com/in/jeffreyhshapiro" target="_blank" rel="noreferrer" className="chat-mode__intro-link">Jeff Shapiro</a>'s portfolio
             </p>
             <SuggestedPrompts onSelect={sendMessage} disabled={isStreaming} />
           </div>

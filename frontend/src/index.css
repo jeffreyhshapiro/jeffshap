@@ -83,6 +83,38 @@ textarea {
   font-weight: 600;
   color: var(--accent);
   letter-spacing: -0.02em;
+  cursor: pointer;
+  user-select: none;
+}
+
+.app--party .app__wordmark {
+  animation: party-spin 0.5s linear infinite;
+}
+
+@keyframes party-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.party-toast {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--text);
+  color: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 10px 20px;
+  border-radius: 99px;
+  z-index: 100;
+  animation: toast-in 0.2s ease;
+  white-space: nowrap;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
 .app__main {
@@ -154,6 +186,15 @@ textarea {
   color: var(--text-secondary);
   font-size: 15px;
   text-align: center;
+}
+
+.chat-mode__intro-link {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.chat-mode__intro-link:hover {
+  text-decoration: underline;
 }
 
 .chat-mode__error {

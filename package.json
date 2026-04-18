@@ -1,0 +1,14 @@
+{
+  "name": "js-portfolio-2026",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "worker"
+  ],
+  "scripts": {
+    "dev:proxy": "node worker/dev-proxy.mjs",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "build": "npm run build --workspace=frontend",
+    "deploy": "npm run build && wrangler pages deploy"
+  }
+}

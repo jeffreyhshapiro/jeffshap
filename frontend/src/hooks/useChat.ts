@@ -1,5 +1,16 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import type { Message } from '../types';
+
+const STORAGE_KEY = 'chat_messages';
+
+function loadMessages(): Message[] {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
 
 function parseSSEChunk(chunk: string): string {
   let text = '';
@@ -21,9 +32,17 @@ function parseSSEChunk(chunk: string): string {
 }
 
 export function useChat() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(loadMessages);
   const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+    } catch {
+      // storage full or unavailable
+    }
+  }, [messages]);
 
   const sendMessage = useCallback(async (content: string) => {
     if (isStreaming) return;
@@ -105,5 +124,9 @@ export function useChat() {
     }
   }, [messages, isStreaming]);
 
-  return { messages, isStreaming, error, sendMessage };
+  const clearMessages = useCallback(() => {
+    setMessages([]);
+  }, []);
+
+  return { messages, isStreaming, error, sendMessage, clearMessages };
 }

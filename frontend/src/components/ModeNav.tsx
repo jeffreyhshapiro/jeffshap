@@ -8,7 +8,7 @@ interface Props {
 const MODES: { id: Mode; label: string; available: boolean }[] = [
   { id: 'chat', label: 'Chat', available: true },
   { id: 'resume', label: 'Resume', available: true },
-  { id: '3d', label: '3D', available: false },
+  // { id: '3d', label: '3D', available: false },
 ];
 
 export function ModeNav({ mode, onChange }: Props) {

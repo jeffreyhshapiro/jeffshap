@@ -28,7 +28,6 @@ export function ChatMode() {
             <p className="chat-mode__subline">
               Instead of reading a <Link to="/resume" className="chat-mode__intro-link">boring old resume</Link>, please have fun getting to know about my work and career with an AI chatbot
             </p>
-            <SuggestedPrompts onSelect={sendMessage} disabled={isStreaming} />
           </div>
         ) : (
           <>
@@ -47,6 +46,7 @@ export function ChatMode() {
         {error && <div className="chat-mode__error">{error}</div>}
       </div>
       <div className="chat-mode__input">
+        <SuggestedPrompts onSelect={sendMessage} disabled={isStreaming} />
         <InputBar onSend={sendMessage} disabled={isStreaming} />
         <p className="chat-mode__disclaimer">
           The information in this chat may be incomplete or a little inaccurate,

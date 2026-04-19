@@ -1,4 +1,5 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import { ModeNav } from './components/ModeNav';
 import { ChatMode } from './components/chat/ChatMode';
@@ -14,12 +15,56 @@ const PARTY_MESSAGES = [
   'most people just read the resume',
 ];
 
+const PATH_TO_MODE: Record<string, Mode> = {
+  '/': 'chat',
+  '/resume': 'resume',
+  '/3d': '3d',
+};
+
+const MODE_TO_PATH: Record<Mode, string> = {
+  chat: '/',
+  resume: '/resume',
+  '3d': '/3d',
+};
+
+const META: Record<Mode, { title: string; description: string }> = {
+  chat: {
+    title: 'Jeff Shapiro | Web-focused Software Engineer | Frontend, Architecture, and Systems',
+    description: 'Jeff Shapiro is a software engineer based in NYC',
+  },
+  resume: {
+    title: 'Resume | Jeff Shapiro | Software Engineer',
+    description: 'Resume of Jeff Shapiro, a software engineer based in NYC specializing in frontend and architecture.',
+  },
+  '3d': {
+    title: 'Jeff Shapiro | Software Engineer',
+    description: 'Jeff Shapiro is a software engineer based in NYC',
+  },
+};
+
 export function App() {
-  const [mode, setMode] = useState<Mode>('chat');
+  const location = useLocation();
+  const navigate = useNavigate();
+  const mode: Mode = PATH_TO_MODE[location.pathname] ?? 'chat';
+
   const [party, setParty] = useState(false);
   const [partyMsg] = useState(() => PARTY_MESSAGES[Math.floor(Math.random() * PARTY_MESSAGES.length)]);
   const clickCount = useRef(0);
   const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    const { title, description } = META[mode];
+    document.title = title;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', description);
+    document.querySelector('meta[property="og:title"]')?.setAttribute('content', title);
+    document.querySelector('meta[property="og:description"]')?.setAttribute('content', description);
+    document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', title);
+    document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', description);
+  }, [mode]);
+
+  function handleModeChange(next: Mode) {
+    navigate(MODE_TO_PATH[next]);
+  }
 
   function handleWordmarkClick() {
     clickCount.current += 1;
@@ -39,12 +84,14 @@ export function App() {
       {party && <div className="party-toast">{partyMsg}</div>}
       <header className="app__header">
         <span className="app__wordmark" onClick={handleWordmarkClick} role="button" tabIndex={0}>js</span>
-        <ModeNav mode={mode} onChange={setMode} />
+        <ModeNav mode={mode} onChange={handleModeChange} />
       </header>
       <main className="app__main">
-        {mode === 'chat' && <ChatMode />}
-        {mode === 'resume' && <ResumeMode />}
-        {mode === '3d' && <ThreeDMode />}
+        <Routes>
+          <Route path="/" element={<ChatMode />} />
+          <Route path="/resume" element={<ResumeMode />} />
+          <Route path="/3d" element={<ThreeDMode />} />
+        </Routes>
       </main>
     </div>
   );

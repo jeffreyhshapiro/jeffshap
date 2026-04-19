@@ -322,6 +322,20 @@ textarea {
   border-bottom-left-radius: var(--radius-sm);
 }
 
+.message__content a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.message--assistant .message__content a {
+  color: var(--accent);
+}
+
+.message--user .message__content a {
+  color: inherit;
+  opacity: 0.8;
+}
+
 /* streaming cursor */
 .cursor {
   display: inline-block;

@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useChat } from '../../hooks/useChat';
 import { MessageList } from './MessageList';
 import { InputBar } from './InputBar';
@@ -25,7 +26,7 @@ export function ChatMode() {
               's portfolio.
             </p>
             <p className="chat-mode__subline">
-              Instead of reading a boring old resume, please have fun getting to know about my work and career with an AI chatbot
+              Instead of reading a <Link to="/resume" className="chat-mode__intro-link">boring old resume</Link>, please have fun getting to know about my work and career with an AI chatbot
             </p>
             <SuggestedPrompts onSelect={sendMessage} disabled={isStreaming} />
           </div>

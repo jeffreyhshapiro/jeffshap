@@ -118,6 +118,70 @@ a:hover {
   padding: 72px 24px 96px;
 }
 
+/* ─── Home ───────────────────────────────────────────────────── */
+.main--home {
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  min-height: 100dvh;
+}
+
+.home {
+  width: 100%;
+}
+
+.home__inner {
+  max-width: var(--measure);
+  margin: 0 auto;
+}
+
+.home__name {
+  font-size: clamp(34px, 7vw, 48px);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 14px;
+}
+
+.home__tagline {
+  font-size: clamp(16px, 2.4vw, 19px);
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 46ch;
+  text-wrap: pretty;
+  margin-bottom: 36px;
+}
+
+.home__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  color: var(--accent);
+}
+
+.home__link span {
+  transition: transform 0.15s ease;
+}
+
+.home__link:hover {
+  text-decoration: none;
+}
+
+.home__link:hover span {
+  transform: translateX(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home__link span {
+    transition: none;
+  }
+
+  .home__link:hover span {
+    transform: none;
+  }
+}
+
 /* ─── Intro ──────────────────────────────────────────────────── */
 .intro {
   padding-bottom: 40px;
@@ -337,6 +401,10 @@ a:hover {
 
   .entry__head {
     gap: 4px;
+  }
+
+  .main--home {
+    padding: 0 20px;
   }
 
   .skills__row {

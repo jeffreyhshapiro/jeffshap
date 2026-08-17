@@ -29,8 +29,9 @@ export interface Education {
 }
 
 export const PROFILE = {
-  name: 'Jeff Shapiro',
+  name: 'jeff shapiro',
   title: 'Software Engineer',
+  tagline: 'software engineer | frontend, architecture, AI and LLMs',
   location: 'New York, NY',
   email: 'jeffreyhshapiro@gmail.com',
   linkedin: 'https://linkedin.com/in/jeffreyhshapiro',

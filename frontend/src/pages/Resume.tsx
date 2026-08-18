@@ -1,8 +1,11 @@
 import { PROFILE, COMPETENCIES, PROJECTS, JOBS, EDUCATION } from '../data';
+import { useReveal } from '../useReveal';
 
 export function Resume() {
+  const ref = useReveal<HTMLDivElement>();
+
   return (
-    <>
+    <div ref={ref}>
       <section className="intro">
         <h1 className="intro__name">{PROFILE.name}</h1>
         <p className="intro__title">
@@ -13,15 +16,19 @@ export function Resume() {
         <p className="intro__blurb">{PROFILE.intro}</p>
       </section>
 
-      <section className="section" aria-labelledby="skills-heading">
-        <h2 className="section__title" id="skills-heading">Core competencies</h2>
+      <section className="section reveal" aria-labelledby="skills-heading">
+        <h2 className="section__title" id="skills-heading">
+          Core competencies
+        </h2>
         <dl className="skills">
           {COMPETENCIES.map((competency) => (
             <div className="skills__row" key={competency.area}>
               <dt className="skills__area">{competency.area}</dt>
               <dd className="skills__items">
                 {competency.items.map((item) => (
-                  <span className="skills__tag" key={item}>{item}</span>
+                  <span className="skills__tag" key={item}>
+                    {item}
+                  </span>
                 ))}
               </dd>
             </div>
@@ -29,10 +36,12 @@ export function Resume() {
         </dl>
       </section>
 
-      <section className="section" aria-labelledby="projects-heading">
-        <h2 className="section__title" id="projects-heading">Projects</h2>
+      <section className="section reveal" aria-labelledby="projects-heading">
+        <h2 className="section__title" id="projects-heading">
+          Projects
+        </h2>
         {PROJECTS.map((project) => (
-          <article className="entry" key={project.name}>
+          <article className="entry entry--panel" key={project.name}>
             <div className="entry__head">
               <h3 className="entry__title">{project.name}</h3>
               {project.href && (
@@ -51,10 +60,12 @@ export function Resume() {
         ))}
       </section>
 
-      <section className="section" aria-labelledby="experience-heading">
-        <h2 className="section__title" id="experience-heading">Experience</h2>
+      <section className="section reveal" aria-labelledby="experience-heading">
+        <h2 className="section__title" id="experience-heading">
+          Experience
+        </h2>
         {JOBS.map((job) => (
-          <article className="entry" key={job.company}>
+          <article className="entry entry--job" key={job.company}>
             {job.roles.map((role, i) => (
               <div
                 className={`entry__head${i > 0 ? ' entry__head--sub' : ''}`}
@@ -84,10 +95,15 @@ export function Resume() {
         ))}
       </section>
 
-      <section className="section" aria-labelledby="education-heading">
-        <h2 className="section__title" id="education-heading">Education</h2>
+      <section className="section reveal" aria-labelledby="education-heading">
+        <h2 className="section__title" id="education-heading">
+          Education
+        </h2>
         {EDUCATION.map((edu) => (
-          <article className="entry entry--compact" key={edu.credential}>
+          <article
+            className="entry entry--panel entry--compact"
+            key={edu.credential}
+          >
             <div className="entry__head">
               <h3 className="entry__title">{edu.credential}</h3>
               <span className="entry__dates">{edu.dates}</span>
@@ -97,11 +113,12 @@ export function Resume() {
         ))}
       </section>
 
-      <footer className="footer">
+      <footer className="footer reveal">
         <p className="footer__note">
           Get in touch — <a href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
         </p>
+        <p className="footer__meta">{PROFILE.location}</p>
       </footer>
-    </>
+    </div>
   );
 }

@@ -37,7 +37,7 @@ export const PROFILE = {
   linkedin: 'https://linkedin.com/in/jeffreyhshapiro',
   github: 'https://github.com/jeffreyhshapiro',
   intro:
-    'I build for the web — frontend, architecture, and the systems underneath. Most of my career has been spent on ecommerce platforms, growing small teams and shipping the kind of infrastructure that lets designers, merchandisers, and marketers move without waiting on engineering. Lately I work a lot with AI-assisted tooling, and on the side on music and audio projects in the browser.',
+    'I build for the web — frontend, architecture, and the systems underneath. Most of my career has been in ecommerce, growing small teams and shipping the kind of infrastructure that lets designers, merchandisers, and marketers ship without waiting on engineering. Lately that means a lot of AI-assisted tooling. On the side, music and audio in the browser.',
 };
 
 export const COMPETENCIES: Competency[] = [

@@ -46,12 +46,14 @@ export function App() {
     <div className={`page${isHome ? ' page--home' : ''}`}>
       {!isHome && (
         <header className="topbar">
-          <Link className="topbar__wordmark" to="/">js</Link>
-          <nav className="topbar__links" aria-label="Contact">
-            <a href={`mailto:${PROFILE.email}`}>Email</a>
-            <a href={PROFILE.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
-            <a href={PROFILE.github} target="_blank" rel="noreferrer">GitHub</a>
-          </nav>
+          <div className="topbar__inner">
+            <Link className="topbar__wordmark" to="/">jeff shapiro</Link>
+            <nav className="topbar__links" aria-label="Contact">
+              <a href={`mailto:${PROFILE.email}`}>Email</a>
+              <a href={PROFILE.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+              <a href={PROFILE.github} target="_blank" rel="noreferrer">GitHub</a>
+            </nav>
+          </div>
         </header>
       )}
       <main className={isHome ? 'main main--home' : 'main'}>

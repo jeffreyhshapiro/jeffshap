@@ -1,12 +1,16 @@
 /* ─── Tokens ─────────────────────────────────────────────────── */
 :root {
-  /* Light: cool paper, near-black ink, one slate-blue accent */
-  --paper: #fbfbfa;
-  --ink: #16181c;
-  --ink-soft: #4a4f57;
-  --ink-faint: #878d96;
-  --rule: #e2e2df;
-  --accent: #3d5a80;
+  /* Warm light: soft sand paper, warm brown-black ink, muted clay accent.
+     Every neutral sits on the warm side of the axis so the page reads as
+     paper rather than screen. Light only, no dark counterpart. */
+  --paper: #faf6f0;
+  --ink: #23201c;
+  --ink-soft: #57504a;
+  /* Dark enough to clear 4.5:1 on --paper; it carries small text
+     (dates, section labels, locations), not just decoration. */
+  --ink-faint: #786e60;
+  --rule: #e6ded3;
+  --accent: #9a5433;
 
   --serif: 'Newsreader', ui-serif, Georgia, 'Times New Roman', serif;
   --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -16,18 +20,7 @@
   --rail-gap: 40px;
   --measure: 760px;
 
-  color-scheme: light dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --paper: #101215;
-    --ink: #e8e8e5;
-    --ink-soft: #a6abb3;
-    --ink-faint: #6f757e;
-    --rule: #24272c;
-    --accent: #8fb0d4;
-  }
+  color-scheme: light;
 }
 
 *,

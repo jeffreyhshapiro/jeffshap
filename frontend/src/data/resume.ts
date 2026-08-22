@@ -29,8 +29,8 @@ export const EXPERIENCE: Position[] = [
     company: 'Ernesta',
     location: 'New York, NY',
     roles: [
-      { title: 'Staff Software Engineer', dates: 'Feb 2026 — Present' },
-      { title: 'Senior Software Engineer', dates: 'May 2023 — Feb 2026' },
+      { title: 'Staff Software Engineer', dates: 'Feb 2026 – Present' },
+      { title: 'Senior Software Engineer', dates: 'May 2023 – Feb 2026' },
     ],
     bullets: [
       'Brought organic search presence to top 5 (avg) for phrases such as "custom-sized rugs" by leading technical SEO implementation',
@@ -44,8 +44,8 @@ export const EXPERIENCE: Position[] = [
     company: 'Bombas',
     location: 'New York, NY',
     roles: [
-      { title: 'Senior Software Engineer', dates: 'Dec 2021 — May 2023' },
-      { title: 'Front End Engineer', dates: 'Oct 2018 — Dec 2021' },
+      { title: 'Senior Software Engineer', dates: 'Dec 2021 – May 2023' },
+      { title: 'Front End Engineer', dates: 'Oct 2018 – Dec 2021' },
     ],
     bullets: [
       'Developed a set of CMS-powered design system blocks, empowering merchandising and marketing teams to independently build static pages and update collection/product content',
@@ -56,7 +56,7 @@ export const EXPERIENCE: Position[] = [
   {
     company: 'Greats',
     location: 'Brooklyn, NY',
-    roles: [{ title: 'Full Stack Developer', dates: 'Aug 2017 — Oct 2018' }],
+    roles: [{ title: 'Full Stack Developer', dates: 'Aug 2017 – Oct 2018' }],
     bullets: [
       'Led the development of the company Shopify ecommerce site',
       'Built custom services with Node that interact with the Shopify Admin API',
@@ -66,7 +66,7 @@ export const EXPERIENCE: Position[] = [
   {
     company: 'iDialogs',
     location: 'New York, NY',
-    roles: [{ title: 'Web Developer', dates: 'Sep 2016 — Jul 2017' }],
+    roles: [{ title: 'Web Developer', dates: 'Sep 2016 – Jul 2017' }],
     bullets: [
       'Developed a beta Alexa skill for recording patient data which resulted in raising $250k to support continued exploration of business opportunity',
       'Improved website Help section by creating a toolset that streamlined the process of generating user-facing documentation',
@@ -76,7 +76,7 @@ export const EXPERIENCE: Position[] = [
   {
     company: 'Pharma industry',
     location: '',
-    roles: [{ title: 'Lab Technician', dates: '2014 — 2016' }],
+    roles: [{ title: 'Lab Technician', dates: '2014 – 2016' }],
   },
 ];
 
@@ -95,7 +95,7 @@ export const EDUCATION: Education[] = [
     credential: 'AI Engineering Fellow',
     school: 'Overclock Accelerator',
     location: 'Online',
-    dates: 'Oct 2025 — Dec 2025',
+    dates: 'Oct 2025 – Dec 2025',
   },
   {
     credential: 'Web Development',

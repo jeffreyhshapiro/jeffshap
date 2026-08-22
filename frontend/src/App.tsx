@@ -3,7 +3,7 @@ import { Resume } from './components/Resume';
 
 const TITLE = 'Jeff Shapiro | Staff Software Engineer, New York';
 const DESCRIPTION =
-  'Jeff Shapiro is a staff software engineer in New York City building web storefronts for consumer brands — front-end architecture, technical SEO, experimentation, and search.';
+  'Jeff Shapiro is a staff software engineer in New York City building web storefronts for consumer brands: front-end architecture, technical SEO, experimentation, and search.';
 
 const META_SELECTORS = [
   'meta[name="description"]',

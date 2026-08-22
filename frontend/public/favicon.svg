@@ -1,14 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <style>
-    rect { fill: #fbfbfa }
-    text { fill: #16181c }
-    @media (prefers-color-scheme: dark) {
-      rect { fill: #101215 }
-      text { fill: #e8e8e5 }
-    }
-  </style>
-  <rect width="64" height="64" rx="10"/>
-  <text x="32" y="45" text-anchor="middle"
+  <rect width="64" height="64" rx="10" fill="#faf6f0"/>
+  <text x="32" y="45" text-anchor="middle" fill="#23201c"
         font-family="Georgia, 'Times New Roman', serif"
         font-size="38" font-weight="500" letter-spacing="-1">JS</text>
 </svg>

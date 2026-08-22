@@ -34,8 +34,8 @@ export function Resume() {
         <p>
           I build the web storefronts that consumer brands run on. For most of the last decade
           that has meant joining a very small engineering team early, shipping the thing that
-          makes money, and then helping the team and its practices grow up around it — at
-          Ernesta today, and at Bombas and Greats before that.
+          makes money, and then helping the team and its practices grow up around it. That
+          is Ernesta today, and it was Bombas and Greats before that.
         </p>
         <p>
           The work I like sits where the front end meets the systems behind it: technical SEO,

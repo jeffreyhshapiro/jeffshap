@@ -1,7 +1,0 @@
-{
-  "name": "js-portfolio-worker",
-  "private": true,
-  "scripts": {
-    "dev": "node dev-proxy.mjs"
-  }
-}

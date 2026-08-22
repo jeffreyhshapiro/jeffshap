@@ -1,8 +1,3 @@
 name = "jeffshap"
 pages_build_output_dir = "frontend/dist"
 compatibility_date = "2024-01-01"
-
-# Fill in after: wrangler kv:namespace create RATE_LIMIT
-[[kv_namespaces]]
-binding = "RATE_LIMIT"
-id = "145d25751e5a47b6bb256e2296654071"

@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import confetti from 'canvas-confetti';
-import { ModeNav } from './components/ModeNav';
-import { ChatMode } from './components/chat/ChatMode';
-import { ResumeMode } from './components/ResumeMode';
-import { ThreeDMode } from './components/ThreeDMode';
-import type { Mode } from './types';
+import { Hero } from './components/Hero';
+import { Focus } from './components/Focus';
+import { Experience } from './components/Experience';
+import { Projects } from './components/Projects';
+import { Education } from './components/Education';
+import { Footer } from './components/Footer';
+import { PROFILE } from './data/resume';
 
 const PARTY_MESSAGES = [
   'you found the secret',
@@ -15,84 +16,108 @@ const PARTY_MESSAGES = [
   'most people just read the resume',
 ];
 
-const PATH_TO_MODE: Record<string, Mode> = {
-  '/': 'chat',
-  '/resume': 'resume',
-  '/3d': '3d',
+const META = {
+  title: 'Jeff Shapiro | Staff Software Engineer | Commerce, Search, and Web Platform',
+  description:
+    'Jeff Shapiro is a Staff Software Engineer in New York City building commerce storefronts and the search, experimentation, and content systems behind them.',
 };
 
-const MODE_TO_PATH: Record<Mode, string> = {
-  chat: '/',
-  resume: '/resume',
-  '3d': '/3d',
-};
-
-const META: Record<Mode, { title: string; description: string }> = {
-  chat: {
-    title: 'Jeff Shapiro | Web-focused Software Engineer | Frontend, Architecture, and Systems',
-    description: 'Jeff Shapiro is a software engineer based in NYC',
-  },
-  resume: {
-    title: 'Resume | Jeff Shapiro | Software Engineer',
-    description: 'Resume of Jeff Shapiro, a software engineer based in NYC specializing in frontend and architecture.',
-  },
-  '3d': {
-    title: 'Jeff Shapiro | Software Engineer',
-    description: 'Jeff Shapiro is a software engineer based in NYC',
-  },
-};
+const NAV = [
+  { href: '#focus-heading', label: 'Focus' },
+  { href: '#experience-heading', label: 'Experience' },
+  { href: '#projects-heading', label: 'Projects' },
+  { href: '#contact', label: 'Contact' },
+];
 
 export function App() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const mode: Mode = PATH_TO_MODE[location.pathname] ?? 'chat';
-
   const [party, setParty] = useState(false);
-  const [partyMsg] = useState(() => PARTY_MESSAGES[Math.floor(Math.random() * PARTY_MESSAGES.length)]);
+  const [partyMsg] = useState(
+    () => PARTY_MESSAGES[Math.floor(Math.random() * PARTY_MESSAGES.length)]
+  );
   const clickCount = useRef(0);
   const clickTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const partyTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    const { title, description } = META[mode];
-    document.title = title;
-    document.querySelector('meta[name="description"]')?.setAttribute('content', description);
-    document.querySelector('meta[property="og:title"]')?.setAttribute('content', title);
-    document.querySelector('meta[property="og:description"]')?.setAttribute('content', description);
-    document.querySelector('meta[name="twitter:title"]')?.setAttribute('content', title);
-    document.querySelector('meta[name="twitter:description"]')?.setAttribute('content', description);
-  }, [mode]);
+    document.title = META.title;
+    const set = (selector: string, content: string) =>
+      document.querySelector(selector)?.setAttribute('content', content);
 
-  function handleModeChange(next: Mode) {
-    navigate(MODE_TO_PATH[next]);
-  }
+    set('meta[name="description"]', META.description);
+    set('meta[property="og:title"]', META.title);
+    set('meta[property="og:description"]', META.description);
+    set('meta[name="twitter:title"]', META.title);
+    set('meta[name="twitter:description"]', META.description);
+  }, []);
+
+  useEffect(
+    () => () => {
+      if (clickTimer.current) clearTimeout(clickTimer.current);
+      if (partyTimer.current) clearTimeout(partyTimer.current);
+    },
+    []
+  );
 
   function handleWordmarkClick() {
     clickCount.current += 1;
     if (clickTimer.current) clearTimeout(clickTimer.current);
-    clickTimer.current = setTimeout(() => { clickCount.current = 0; }, 800);
+    clickTimer.current = setTimeout(() => {
+      clickCount.current = 0;
+    }, 800);
 
     if (clickCount.current >= 5) {
       clickCount.current = 0;
       setParty(true);
-      setTimeout(() => setParty(false), 3000);
-      confetti({ particleCount: 120, spread: 80, origin: { y: 0.3 } });
+      if (partyTimer.current) clearTimeout(partyTimer.current);
+      partyTimer.current = setTimeout(() => setParty(false), 3000);
+
+      const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+      if (!reduced) {
+        confetti({ particleCount: 120, spread: 80, origin: { y: 0.3 } });
+      }
     }
   }
 
   return (
-    <div className={`app${party ? ' app--party' : ''}`}>
-      {party && <div className="party-toast">{partyMsg}</div>}
+    <div className="app">
+      {party && (
+        <div className="party-toast" role="status">
+          {partyMsg}
+        </div>
+      )}
+
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
+
       <header className="app__header">
-        <span className="app__wordmark" onClick={handleWordmarkClick} role="button" tabIndex={0}>js</span>
-        <ModeNav mode={mode} onChange={handleModeChange} />
+        <button
+          type="button"
+          className="app__wordmark"
+          onClick={handleWordmarkClick}
+          aria-label={PROFILE.name}
+        >
+          js
+        </button>
+
+        <nav className="app__nav" aria-label="Sections">
+          {NAV.map((item) => (
+            <a key={item.href} className="app__nav-link" href={item.href}>
+              {item.label}
+            </a>
+          ))}
+        </nav>
       </header>
-      <main className="app__main">
-        <Routes>
-          <Route path="/" element={<ChatMode />} />
-          <Route path="/resume" element={<ResumeMode />} />
-          <Route path="/3d" element={<ThreeDMode />} />
-        </Routes>
+
+      <main className="app__main" id="main">
+        <Hero />
+        <Focus />
+        <Experience />
+        <Projects />
+        <Education />
       </main>
+
+      <Footer />
     </div>
   );
 }

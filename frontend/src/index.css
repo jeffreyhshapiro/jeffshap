@@ -1,575 +1,447 @@
-/* ─── Design tokens ──────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* ─── Tokens ─────────────────────────────────────────────────── */
 :root {
-  /* Colors */
-  --bg: #faf9f7;
-  --bg-surface: #f3f1ed;
-  --border: #e0ddd8;
-  --text: #2a2825;
-  --text-secondary: #6b6560;
-  --text-muted: #9c9790;
-  --accent: #2f4f3a;          /* deep forest green — personality anchor */
-  --accent-light: #e8f0eb;
-  --user-bubble-bg: #2a2825;
-  --user-bubble-text: #faf9f7;
-  --error: #c0392b;
+  --ink:        #080a0b;
+  --ink-raised: #0f1315;
+  --field:      #3f7f5f;   /* the point field's green */
+  --field-lit:  #6bb98d;   /* same hue, lifted for link text contrast */
+  --amber:      #c8873f;   /* reserved: active chapter only */
+  --bone:       #ece8e0;
+  --bone-dim:   #a8a49c;
+  --bone-faint: #8b877f;
+  --hair:       rgba(236, 232, 224, 0.12);
 
-  /* Typography */
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, 'Cascadia Code', monospace;
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --font-sans:    'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
 
-  /* Spacing */
-  --header-height: 52px;
-  --chat-max-width: 720px;
-  --gap: 16px;
+  --measure: 660px;
+  --gutter: clamp(20px, 5vw, 56px);
 
-  /* Radii */
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
-
+  color-scheme: dark;
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.6;
-  color: var(--text);
-  background: var(--bg);
+  color: var(--bone);
+  background: var(--ink);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ─── Reset ──────────────────────────────────────────────────── */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+body { background: var(--ink); min-height: 100dvh; overflow-x: hidden; }
+
+a { color: inherit; }
+
+::selection { background: var(--field); color: var(--bone); }
+
+/* ─── Field stage ────────────────────────────────────────────── */
+.field__stage {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
 }
 
-body {
-  min-height: 100dvh;
+.field-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
-button {
-  font: inherit;
-  cursor: pointer;
-  border: none;
-  background: none;
+/* If the context dies mid-session the canvas is hidden rather than left
+   as a black rectangle — the gradient below shows through instead. */
+.field-canvas[data-failed='true'] { opacity: 0; }
+
+/* Static ground used when WebGL is unavailable, and visible behind a
+   failed canvas. Never a blank screen. */
+.field__stage--fallback,
+.field__stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 80% at 22% 18%, rgba(63, 127, 95, 0.20), transparent 60%),
+    radial-gradient(90% 70% at 82% 72%, rgba(200, 135, 63, 0.10), transparent 62%),
+    linear-gradient(180deg, #12171a 0%, var(--ink) 70%);
+  z-index: -1;
 }
 
-textarea {
-  font: inherit;
-  resize: none;
+/* Keeps text contrast steady wherever the field happens to be bright. */
+/* Darkens the reading column so body text keeps contrast, while leaving the
+   right/outer field visible. A flat scrim over everything just hid the scene. */
+.field__veil {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(8, 10, 11, 0.86) 0%, rgba(8, 10, 11, 0.78) 34%, rgba(8, 10, 11, 0.30) 62%, rgba(8, 10, 11, 0) 88%),
+    linear-gradient(180deg, rgba(8, 10, 11, 0.55) 0%, rgba(8, 10, 11, 0.1) 26%, rgba(8, 10, 11, 0.1) 68%, rgba(8, 10, 11, 0.72) 100%);
 }
 
-/* ─── App shell ──────────────────────────────────────────────── */
-.app {
-  display: flex;
-  flex-direction: column;
-  height: 100dvh;
+/* ─── Document ───────────────────────────────────────────────── */
+.doc {
+  position: relative;
+  z-index: 2;
+  padding: 0 var(--gutter);
 }
 
-.app__header {
-  height: var(--header-height);
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 10;
+  background: var(--bone);
+  color: var(--ink);
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.skip-link:focus { left: var(--gutter); top: 16px; }
+
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ─── Hero ───────────────────────────────────────────────────── */
+.hero {
+  min-height: 100svh;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 24px;
-  border-bottom: 1px solid var(--border);
-  background: var(--bg);
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 96px 0 72px;
+}
+
+.hero__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bone-faint);
+  margin-bottom: 22px;
+}
+
+.hero__name {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(3rem, 11vw, 6.5rem);
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+  margin-bottom: 20px;
+  /* Optical size axis: large display cut at this size. */
+  font-variation-settings: 'opsz' 120;
+}
+
+.hero__role {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: clamp(1rem, 2.4vw, 1.2rem);
+  margin-bottom: 26px;
+}
+
+.hero__role-main { font-weight: 600; color: var(--bone); }
+
+.hero__role-sep {
+  width: 26px;
+  height: 1px;
+  background: var(--field);
   flex-shrink: 0;
 }
 
-.app__wordmark {
+.hero__role-loc {
   font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--bone-dim);
+  letter-spacing: 0.02em;
+}
+
+.hero__blurb {
+  max-width: 46ch;
+  color: var(--bone-dim);
   font-size: 15px;
-  font-weight: 600;
-  color: var(--accent);
-  letter-spacing: -0.02em;
-  cursor: pointer;
-  user-select: none;
+  line-height: 1.75;
+  margin-bottom: 34px;
 }
 
-.app--party .app__wordmark {
-  animation: party-spin 0.5s linear infinite;
-}
-
-@keyframes party-spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-
-.party-toast {
-  position: fixed;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--text);
-  color: var(--bg);
-  font-family: var(--font-mono);
-  font-size: 13px;
-  padding: 10px 20px;
-  border-radius: 99px;
-  z-index: 100;
-  animation: toast-in 0.2s ease;
-  white-space: nowrap;
-}
-
-@keyframes toast-in {
-  from { opacity: 0; transform: translateX(-50%) translateY(8px); }
-  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
-}
-
-.app__main {
-  flex: 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-/* ─── Mode nav ───────────────────────────────────────────────── */
-.mode-nav {
-  display: flex;
-  gap: 4px;
-}
-
-.mode-nav__btn {
-  padding: 5px 12px;
-  border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-secondary);
-  transition: color 0.15s, background 0.15s;
-}
-
-.mode-nav__btn:hover:not(:disabled) {
-  color: var(--text);
-  background: var(--bg-surface);
-}
-
-.mode-nav__btn--active {
-  color: var(--text);
-  background: var(--bg-surface);
-}
-
-.mode-nav__btn--disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-/* ─── Chat mode ──────────────────────────────────────────────── */
-.chat-mode {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.chat-mode__history {
-  flex: 1;
-  overflow-y: auto;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-}
-
-.chat-mode__empty {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 24px;
-  max-width: var(--chat-max-width);
-  margin: 0 auto;
-  width: 100%;
-}
-
-.chat-mode__intro {
-  color: var(--text);
-  font-size: 17px;
-  font-weight: 500;
-  text-align: center;
-}
-
-.chat-mode__subline {
-  color: var(--text-muted);
-  font-size: 13px;
-  text-align: center;
-  max-width: 340px;
-}
-
-.chat-mode__intro-link {
-  color: var(--accent);
-  text-decoration: none;
-}
-
-.chat-mode__intro-link:hover {
-  text-decoration: underline;
-}
-
-.chat-mode__clear {
-  display: flex;
-  justify-content: center;
-  padding: 8px 0 4px;
-  max-width: var(--chat-max-width);
-  margin: 0 auto;
-  width: 100%;
-}
-
-.chat-mode__clear-btn {
-  font-size: 12px;
-  color: var(--text-muted);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.chat-mode__clear-btn:hover:not(:disabled) {
-  color: var(--text-secondary);
-}
-
-.chat-mode__error {
-  color: var(--error);
-  font-size: 13px;
-  padding: 8px 12px;
-  margin-top: 8px;
-  border-radius: var(--radius-sm);
-  background: rgba(192, 57, 43, 0.08);
-}
-
-.chat-mode__input {
-  padding: 16px 24px 16px;
-  border-top: 1px solid var(--border);
-  background: var(--bg);
-}
-
-.chat-mode__disclaimer {
-  text-align: center;
-  font-size: 11px;
-  color: var(--text-muted);
-  margin-top: 8px;
-}
-
-/* ─── Suggested prompts ──────────────────────────────────────── */
-.suggested-prompts {
+.hero__links {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-  max-width: var(--chat-max-width);
-  margin: 0 auto;
-  width: 100%;
-  padding-bottom: 10px;
+  gap: 10px;
 }
 
-.prompt-chip {
-  padding: 8px 16px;
-  border-radius: 99px;
-  border: 1px solid var(--border);
-  background: var(--bg);
-  color: var(--text-secondary);
+.hero__links a {
   font-size: 13px;
   font-weight: 500;
-  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  text-decoration: none;
+  padding: 9px 16px;
+  border: 1px solid var(--hair);
+  border-radius: 99px;
+  color: var(--bone-dim);
+  background: rgba(15, 19, 21, 0.5);
+  backdrop-filter: blur(8px);
+  transition: color 0.18s, border-color 0.18s, background 0.18s;
 }
 
-.prompt-chip:hover:not(:disabled) {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: var(--accent-light);
+.hero__links a:hover {
+  color: var(--bone);
+  border-color: rgba(63, 127, 95, 0.7);
+  background: rgba(63, 127, 95, 0.14);
 }
 
-.prompt-chip:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.hero__links-cta {
+  color: var(--bone) !important;
+  border-color: rgba(236, 232, 224, 0.3) !important;
 }
 
-/* ─── Message list ───────────────────────────────────────────── */
-.message-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  max-width: var(--chat-max-width);
-  margin: 0 auto;
-  width: 100%;
-}
-
-/* ─── Message ────────────────────────────────────────────────── */
-.message {
-  display: flex;
-}
-
-.message--user {
-  justify-content: flex-end;
-}
-
-.message--assistant {
-  justify-content: flex-start;
-}
-
-.message__content {
-  max-width: 80%;
-  padding: 10px 15px;
-  border-radius: var(--radius-lg);
-  font-size: 14px;
-  line-height: 1.65;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.message--user .message__content {
-  background: var(--user-bubble-bg);
-  color: var(--user-bubble-text);
-  border-bottom-right-radius: var(--radius-sm);
-}
-
-.message--assistant .message__content {
-  background: var(--bg-surface);
-  color: var(--text);
-  border-bottom-left-radius: var(--radius-sm);
-}
-
-.message__content a {
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.message--assistant .message__content a {
-  color: var(--accent);
-}
-
-.message--user .message__content a {
-  color: inherit;
-  opacity: 0.8;
-}
-
-/* streaming cursor */
-.cursor {
-  display: inline-block;
-  width: 2px;
-  height: 1em;
-  background: var(--text-muted);
-  margin-left: 2px;
-  vertical-align: text-bottom;
-  animation: blink 1s step-end infinite;
-}
-
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-/* ─── Input bar ──────────────────────────────────────────────── */
-.input-bar {
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  max-width: var(--chat-max-width);
-  margin: 0 auto;
-  width: 100%;
-  background: var(--bg-surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  padding: 10px 12px;
-  transition: border-color 0.15s;
-}
-
-.input-bar:focus-within {
-  border-color: var(--accent);
-}
-
-.input-bar__textarea {
-  flex: 1;
-  background: none;
-  border: none;
-  outline: none;
-  color: var(--text);
-  font-size: 14px;
-  line-height: 1.5;
-  min-height: 22px;
-  max-height: 180px;
-  overflow-y: auto;
-}
-
-.input-bar__textarea::placeholder {
-  color: var(--text-muted);
-}
-
-.input-bar__textarea:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.input-bar__send {
-  flex-shrink: 0;
-  width: 28px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-sm);
-  background: var(--accent);
-  color: #fff;
-  font-size: 14px;
-  transition: opacity 0.15s;
-}
-
-.input-bar__send:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-/* ─── Stub modes ─────────────────────────────────────────────── */
-.stub-mode {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  font-size: 14px;
-}
-
-/* ─── Resume mode ────────────────────────────────────────────── */
-.resume-mode {
-  flex: 1;
-  overflow-y: auto;
-  padding: 40px 24px 64px;
-}
-
+/* ─── Résumé ─────────────────────────────────────────────────── */
 .resume {
-  max-width: 680px;
+  max-width: var(--measure);
   margin: 0 auto;
+  padding-bottom: 96px;
 }
 
-.resume__header {
-  margin-bottom: 36px;
-  padding-bottom: 24px;
-  border-bottom: 1px solid var(--border);
+.resume__section { margin-bottom: 76px; }
+
+.resume__heading {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--bone-faint);
+  padding-bottom: 12px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--hair);
 }
 
-.resume__name {
-  font-size: 26px;
-  font-weight: 600;
-  color: var(--text);
+.resume__list { list-style: none; }
+.resume__list--plain { display: grid; gap: 22px; }
+
+/* ─── Experience entry ───────────────────────────────────────── */
+.entry {
+  position: relative;
+  padding: 0 0 44px 28px;
+}
+
+/* Timeline spine. The last entry's spine stops at its marker. */
+.entry::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 10px;
+  bottom: -10px;
+  width: 1px;
+  background: var(--hair);
+}
+.entry:last-child::before { display: none; }
+
+.entry__marker {
+  position: absolute;
+  left: 0;
+  top: 7px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1px solid var(--bone-faint);
+  background: var(--ink);
+  transition: background 0.4s, border-color 0.4s, box-shadow 0.4s;
+}
+
+/* The one place amber is allowed: the chapter the reader is inside. */
+.entry--active .entry__marker {
+  background: var(--amber);
+  border-color: var(--amber);
+  box-shadow: 0 0 0 4px rgba(200, 135, 63, 0.16);
+}
+
+.entry__company {
+  font-family: var(--font-display);
+  font-variation-settings: 'opsz' 40;
+  font-weight: 400;
+  font-size: 1.55rem;
   letter-spacing: -0.02em;
-  margin-bottom: 2px;
-}
-
-.resume__title {
-  font-size: 14px;
-  color: var(--text-secondary);
+  line-height: 1.2;
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-bottom: 10px;
 }
 
-.resume__contact {
-  font-size: 13px;
-  color: var(--text-secondary);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  align-items: center;
-}
-
-.resume__contact a {
-  color: var(--accent);
-  text-decoration: none;
-}
-
-.resume__contact a:hover {
-  text-decoration: underline;
-}
-
-.resume__contact-sep {
-  display: inline-block;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: var(--border);
-  margin: 0 4px;
-}
-
-.resume__section {
-  margin-bottom: 32px;
-}
-
-.resume__section-title {
+.entry__location {
+  font-family: var(--font-mono);
   font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: 16px;
+  letter-spacing: 0.04em;
+  color: var(--bone-faint);
 }
 
-.resume__job {
-  margin-bottom: 20px;
-}
+.entry__roles { list-style: none; margin-bottom: 14px; }
 
-.resume__job-header {
+.entry__role {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: 12px;
-  margin-bottom: 2px;
+  gap: 16px;
+  padding: 3px 0;
 }
 
-.resume__job-header--sub {
-  margin-top: 2px;
-  margin-bottom: 6px;
-}
-
-.resume__job-title {
+.entry__role-title {
   font-size: 14px;
-  font-weight: 600;
-  color: var(--text);
+  font-weight: 500;
+  color: var(--bone);
 }
 
-.resume__job-company {
-  font-size: 14px;
-  color: var(--text-secondary);
-}
-
-.resume__job-dates {
-  font-size: 12px;
-  color: var(--text-muted);
+.entry__role-dates {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--bone-faint);
   white-space: nowrap;
+}
+
+.entry__bullets {
+  list-style: none;
+  display: grid;
+  gap: 9px;
+}
+
+.entry__bullets li {
+  position: relative;
+  padding-left: 18px;
+  font-size: 14px;
+  line-height: 1.66;
+  color: var(--bone-dim);
+}
+
+.entry__bullets li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.66em;
+  width: 7px;
+  height: 1px;
+  background: var(--field);
+}
+
+/* ─── Projects ───────────────────────────────────────────────── */
+.project {
+  border: 1px solid var(--hair);
+  border-radius: 10px;
+  padding: 22px 24px;
+  background: rgba(15, 19, 21, 0.45);
+  backdrop-filter: blur(10px);
+}
+
+.project__name {
+  font-family: var(--font-display);
+  font-variation-settings: 'opsz' 40;
+  font-weight: 400;
+  font-size: 1.3rem;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.project__link {
   font-family: var(--font-mono);
-}
-
-.resume__bullets {
-  margin: 6px 0 0 16px;
-  padding: 0;
-  list-style: disc;
-}
-
-.resume__bullets li {
-  font-size: 13px;
-  color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 4px;
-}
-
-.resume__project-link {
-  font-size: 12px;
-  color: var(--accent);
+  font-size: 11.5px;
+  color: var(--field-lit);
   text-decoration: none;
+  border-bottom: 1px solid rgba(63, 127, 95, 0.4);
+}
+.project__link:hover { color: var(--amber); border-bottom-color: var(--amber); }
+
+.project__desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--bone-dim);
+  max-width: 54ch;
+}
+
+/* ─── Education ──────────────────────────────────────────────── */
+.edu__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.edu__title { font-size: 14px; font-weight: 500; }
+
+.edu__dates {
   font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--bone-faint);
+  white-space: nowrap;
 }
 
-.resume__project-link:hover {
-  text-decoration: underline;
-}
+.edu__school { font-size: 13px; color: var(--bone-faint); margin-top: 2px; }
 
-.resume__project-desc {
+/* ─── Footer ─────────────────────────────────────────────────── */
+.doc__footer {
+  border-top: 1px solid var(--hair);
+  padding-top: 26px;
   font-size: 13px;
-  color: var(--text-secondary);
-  margin-top: 4px;
-  line-height: 1.6;
+  color: var(--bone-faint);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
-.resume__edu {
-  margin-bottom: 12px;
+.doc__footer a { color: var(--field-lit); text-decoration: none; }
+.doc__footer a:hover { text-decoration: underline; }
+
+/* ─── Narrow viewports ───────────────────────────────────────── */
+@media (max-width: 620px) {
+  .hero { min-height: 92svh; padding: 80px 0 56px; }
+  .hero__name { font-variation-settings: 'opsz' 72; }
+  .entry__role { flex-direction: column; gap: 1px; }
+  .entry__role-dates { font-size: 11px; }
+  .resume__section { margin-bottom: 56px; }
+  /* The field is dimmer on phones so body text stays comfortably readable. */
+  .field__veil {
+    background: linear-gradient(180deg, rgba(8,10,11,0.62) 0%, rgba(8,10,11,0.78) 40%, rgba(8,10,11,0.9) 100%);
+  }
 }
 
-.resume__edu-school {
-  font-size: 13px;
-  color: var(--text-muted);
-  margin-top: 1px;
+/* ─── Reduced motion ─────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }
+
+/* ─── Pre-hydration shell ────────────────────────────────────── */
+/* Mirrors the hero's position so the name does not jump on mount. */
+.boot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(660px, calc(100vw - 2 * var(--gutter)));
+  color: var(--bone);
+}
+.boot h1 {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(3rem, 11vw, 6.5rem);
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+  margin-bottom: 20px;
+}
+.boot p { color: var(--bone-dim); font-size: clamp(1rem, 2.4vw, 1.2rem); }

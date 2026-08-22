@@ -4,18 +4,47 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/jpeg" href="/IMG_8452.jpg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Jeff Shapiro | Web-focused Software Engineer | Frontend, Architecture, and Systems</title>
-    <meta name="description" content="Jeff Shapiro is a software engineer based in NYC" />
+    <meta name="theme-color" content="#080a0b" />
+    <title>Jeff Shapiro | Staff Software Engineer | New York, NY</title>
+    <meta name="description" content="Jeff Shapiro is a Staff Software Engineer in New York, NY, building commerce platforms, design systems, and search and experimentation infrastructure." />
     <meta name="author" content="Jeff Shapiro" />
-    <meta property="og:title" content="Jeff Shapiro | Software Engineer" />
-    <meta property="og:description" content="Jeff Shapiro is a software engineer based in NYC" />
-    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Jeff Shapiro | Staff Software Engineer | New York, NY" />
+    <meta property="og:description" content="Jeff Shapiro is a Staff Software Engineer in New York, NY, building commerce platforms, design systems, and search and experimentation infrastructure." />
+    <meta property="og:type" content="profile" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Jeff Shapiro | Software Engineer" />
-    <meta name="twitter:description" content="Jeff Shapiro is a software engineer based in NYC" />
+    <meta name="twitter:title" content="Jeff Shapiro | Staff Software Engineer | New York, NY" />
+    <meta name="twitter:description" content="Jeff Shapiro is a Staff Software Engineer in New York, NY, building commerce platforms, design systems, and search and experimentation infrastructure." />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Jeff Shapiro",
+        "jobTitle": "Staff Software Engineer",
+        "email": "mailto:jeffreyhshapiro@gmail.com",
+        "url": "https://tab.cafe",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "New York",
+          "addressRegion": "NY",
+          "addressCountry": "US"
+        },
+        "sameAs": [
+          "https://linkedin.com/in/jeffreyhshapiro",
+          "https://github.com/jeffreyhshapiro"
+        ],
+        "worksFor": { "@type": "Organization", "name": "Ernesta" }
+      }
+    </script>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!-- Painted before React hydrates and read by crawlers that do not run JS.
+           Replaced by the app on mount. -->
+      <div class="boot">
+        <h1>Jeff Shapiro</h1>
+        <p>Staff Software Engineer &middot; New York, NY</p>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

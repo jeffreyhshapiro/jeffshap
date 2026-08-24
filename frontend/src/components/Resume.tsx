@@ -1,4 +1,5 @@
 import { EDUCATION, EXPERIENCE, PROJECTS } from '../data/resume';
+import { HEADLINE, SITE } from '../data/seo';
 
 const LINKS = [
   { label: 'jeffreyhshapiro@gmail.com', href: 'mailto:jeffreyhshapiro@gmail.com' },
@@ -10,12 +11,8 @@ export function Resume() {
   return (
     <article className="page">
       <header className="masthead">
-        <h1 className="masthead__name">Jeff Shapiro</h1>
-        <p className="masthead__role">
-          Staff Software Engineer
-          <span className="masthead__sep" aria-hidden="true" />
-          New York, NY
-        </p>
+        <p className="masthead__name">{SITE.name}</p>
+        <h1 className="masthead__headline">{HEADLINE}</h1>
         <nav className="masthead__links" aria-label="Contact">
           {LINKS.map((link) => (
             <a
@@ -32,10 +29,9 @@ export function Resume() {
 
       <section className="intro">
         <p>
-          I build the web storefronts that consumer brands run on. For most of the last decade
-          that has meant joining a very small engineering team early, shipping the thing that
-          makes money, and then helping the team and its practices grow up around it. That
-          is Ernesta today, and it was Bombas and Greats before that.
+          Mostly that has meant joining a very small engineering team early, shipping the
+          thing that makes money, and then helping the team and its practices grow up around
+          it.
         </p>
         <p>
           The work I like sits where the front end meets the systems behind it: technical SEO,

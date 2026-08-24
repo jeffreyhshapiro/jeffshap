@@ -86,35 +86,28 @@ a:focus-visible,
   margin-left: calc(var(--rail) + var(--rail-gap));
 }
 
+/* The name is now the eyebrow; the headline carries the display size. */
 .masthead__name {
-  font-size: clamp(2.6rem, 6vw, 3.4rem);
-  font-weight: 500;
-  line-height: 1.05;
-  letter-spacing: -0.021em;
-}
-
-.masthead__role {
-  margin-top: 12px;
   font-family: var(--mono);
   font-size: 0.78rem;
-  font-weight: 400;
-  letter-spacing: 0.055em;
+  font-weight: 500;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: var(--ink-soft);
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 12px;
+  color: var(--ink-faint);
 }
 
-.masthead__sep {
-  width: 18px;
-  height: 1px;
-  background: var(--ink-faint);
+.masthead__headline {
+  margin-top: 18px;
+  max-width: 22ch;
+  font-size: clamp(2rem, 4.4vw, 2.9rem);
+  font-weight: 500;
+  line-height: 1.14;
+  letter-spacing: -0.019em;
+  text-wrap: balance;
 }
 
 .masthead__links {
-  margin-top: 24px;
+  margin-top: 28px;
   display: flex;
   flex-wrap: wrap;
   gap: 8px 24px;

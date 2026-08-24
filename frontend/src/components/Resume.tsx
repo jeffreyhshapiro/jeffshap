@@ -11,8 +11,8 @@ export function Resume() {
   return (
     <article className="page">
       <header className="masthead">
-        <p className="masthead__name">{SITE.name}</p>
-        <h1 className="masthead__headline">{HEADLINE}</h1>
+        <h1 className="masthead__name">{SITE.name}</h1>
+        <p className="masthead__headline">{HEADLINE}</p>
         <nav className="masthead__links" aria-label="Contact">
           {LINKS.map((link) => (
             <a

@@ -27,21 +27,6 @@ export function Resume() {
         </nav>
       </header>
 
-      <section className="intro">
-        <p>
-          Mostly that has meant joining a very small engineering team early, shipping the
-          thing that makes money, and then helping the team and its practices grow up around
-          it.
-        </p>
-        <p>
-          The work I like sits where the front end meets the systems behind it: technical SEO,
-          server-side experimentation, search and discovery, design systems that let
-          non-engineers move on their own. I came to engineering from a biotech lab by way of a
-          coding bootcamp, which is probably why I still treat shipping as a matter of forming a
-          hypothesis and then actually measuring it.
-        </p>
-      </section>
-
       <Section title="Experience">
         {EXPERIENCE.map((position) => (
           <div className="entry" key={position.company}>

@@ -115,21 +115,6 @@ a:focus-visible,
   color: var(--ink-soft);
 }
 
-/* ─── Intro ──────────────────────────────────────────────────── */
-.intro {
-  margin: 44px 0 0 calc(var(--rail) + var(--rail-gap));
-  max-width: 62ch;
-  display: grid;
-  gap: 18px;
-  font-size: 1.12rem;
-  line-height: 1.62;
-  color: var(--ink);
-}
-
-.intro p {
-  text-wrap: pretty;
-}
-
 /* ─── Sections ───────────────────────────────────────────────── */
 .section {
   margin-top: 72px;
@@ -308,7 +293,6 @@ a:focus-visible,
   }
 
   .masthead,
-  .intro,
   .colophon {
     margin-left: 0;
   }
@@ -363,10 +347,6 @@ a:focus-visible,
 
   .entry__heading {
     font-size: 1.16rem;
-  }
-
-  .intro {
-    font-size: 1.06rem;
   }
 }
 

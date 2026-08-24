@@ -17,6 +17,10 @@ export const SITE = {
   themeColor: '#faf6f0',
 } as const;
 
-/** The page's visible headline. Kept here so it stays in step with the meta description. */
-export const HEADLINE =
-  'Software engineer with 10 years experience building for consumer brands like Ernesta, Bombas, and Greats.';
+/**
+ * The page's visible headline. Deliberately shorter than SITE.description:
+ * the résumé below already shows the years and the brand names, so the
+ * headline only has to say what he does. The description keeps the
+ * specifics because search results and link previews are seen alone.
+ */
+export const HEADLINE = 'Software engineer building for consumer brands.';

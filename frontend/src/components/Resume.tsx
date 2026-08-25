@@ -99,11 +99,6 @@ export function Resume() {
           </div>
         ))}
       </Section>
-
-      <footer className="colophon">
-        <span>Jeff Shapiro</span>
-        <span>New York, NY</span>
-      </footer>
     </article>
   );
 }

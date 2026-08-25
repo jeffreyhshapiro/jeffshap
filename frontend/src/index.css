@@ -269,29 +269,13 @@ a:focus-visible,
   background: var(--ink-faint);
 }
 
-/* ─── Colophon ───────────────────────────────────────────────── */
-.colophon {
-  margin: 88px 0 0 calc(var(--rail) + var(--rail-gap));
-  padding-top: 20px;
-  border-top: 1px solid var(--rule);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-faint);
-}
-
 /* ─── Narrow: the rail collapses into the flow ───────────────── */
 @media (max-width: 720px) {
   .page {
     padding: 56px 22px 80px;
   }
 
-  .masthead,
-  .colophon {
+  .masthead {
     margin-left: 0;
   }
 

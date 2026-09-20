@@ -297,17 +297,43 @@ a:focus-visible,
   }
 
   .section__body {
-    gap: 36px;
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
   }
 
-  /* Single-role entries keep the rail date above the heading;
-     multi-role entries show dates inline beside each role instead. */
+  /* Stacked: the entry becomes a flex column so the rail date can sit
+     BELOW its own heading (order:2) instead of orphaning above it — where
+     it otherwise reads as belonging to the previous entry.
+     Multi-role entries hide the rail and show dates inline per role. */
+  .entry {
+    display: grid;
+    grid-template-columns: 1fr;
+    /* heading block, then its date, then the rest of the body */
+    grid-template-areas:
+      'head'
+      'dates'
+      'body';
+  }
+
   .entry__rail {
+    grid-area: dates;
     padding-top: 0;
-    margin-bottom: 6px;
+    margin-top: 3px;
+    margin-bottom: 0;
     justify-items: start;
     text-align: left;
     gap: 0;
+  }
+
+  .entry__body {
+    grid-area: body;
+    display: contents;
+  }
+
+  /* the heading lifts into its own row so the date lands right beneath it */
+  .entry__heading {
+    grid-area: head;
   }
 
   .entry__rail .entry__dates:not(:first-child) {
